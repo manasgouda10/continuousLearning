@@ -49,3 +49,11 @@ function: function
 })(window, window.JQuery);
  
 This will create a singleton variable ‘myModule’ on ur window. Now u can access those function as myModule.functionA  & myModule.functionB.
+
+Notes
+------
+https://rematchjs.org/
+
+Take a look to Rematch library. Very clean way to implement Redux with no switches, no thunks/saga, no action creators , no types /constants.
+Clean to write large state management with very minimal boilerplate. 
+
