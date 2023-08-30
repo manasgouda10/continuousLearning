@@ -1,0 +1,51 @@
+Problem Statement -
+--------------------
+For one of the customer we have to write unit test cases using JEST for NodeJS application.
+The existing code uses JavaScript immediately invoked function (IIFE), Refer to below sample
+Code. Through JEST we would like to unit test functionA & functionB.
+ 
+The issue I see is with IIFE, how to get handle of the function and method inside it. Could you please
+Let me know if you have any pointers/suggestions. 
+ 
+ 
+(function (window, $) {
+ 
+  let functionA = function($element) {
+      // some code here
+  }     
+ 
+  let functionB = function($element) {
+      // some code here
+  }   
+ 
+  // window object id extended to have method addCmp, similarly method exists for getCmp      
+  window.addCmp(‘key’, {functionA, functionB}      
+ 
+})(window, window.JQuery);
+
+Probable Solution
+-------------------
+You need to use Module revelling pattern to get handler of those functionA and functionB
+ 
+Const myModule = (function (window, $) {
+ 
+  let functionA = function($element) {
+      // some code here
+  }     
+ 
+  let functionB = function($element) {
+      // some code here
+  }   
+ 
+  // window object id extended to have method addCmp, similarly method exists for getCmp      
+  window.addCmp(‘key’, {functionA, functionB} 
+ 
+//return an object which exposes those 2 functions
+return {
+functionA: functionA,
+function: function
+}     
+ 
+})(window, window.JQuery);
+ 
+This will create a singleton variable ‘myModule’ on ur window. Now u can access those function as myModule.functionA  & myModule.functionB.
