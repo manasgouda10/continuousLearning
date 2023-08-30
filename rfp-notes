@@ -5,3 +5,18 @@ Do you have any contents around:
 •	write-up on how we design common / reusable components, its lifecycle, our methodology on component design patterns, its architecture, etc.
 •	Reference slides where we have reusable components as deliverables. Looking for details like documentation, how sprints to be planned etc...
 https://teams.microsoft.com/l/team/19%3ac6bf16a657e24d81aabc572b99f8cffb%40thread.skype/conversations?groupId=49990e91-b92b-4b49-851b-e5e3f13616a1&tenantId=63ce7d59-2f3e-42cd-a8cc-be764cff5eb6
+
+
+Windows CE >> Application Migration Options
+FedEx - TNT is currently using Motorola Windows Mobile / CE OS handheld devices for 2 of their applications. Since Windows CE is out of support now and the devices are having memory constraints,
+Business is trying to find options to mitigate this. As of now, they are not in a position to purchase newer Android devices as the cost would be too high due to large number of devices being used. 
+Could you please provide your views  on feasible solutions that we can recommend on this , Also please find the options that business currently looking
+First Option
+----------------
+Build a new application (may be a hybrid application or something similar) and generate cab file and use in existing devices for now and later use APK for android devices. 
+What they are asking us is to find a solution to use the existing devices itself and to check whether there is an option to use a cross compiled solution for the new application 
+that can work both on Windows CE OS and Android OS. 
+Second Option
+--------------------
+Build a new application using PWA approach and access the application through the Enterprise Browser application on the Motorola Windows CE devices (for now) and if and when in future, 
+they are purchasing Android devices, they can continue to use the PWA application from the Android device also.
