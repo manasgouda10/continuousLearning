@@ -1,0 +1,279 @@
+https://rematchjs.org/
+
+Take a look to Rematch library. Very clean way to implement Redux with no switches, no thunks/saga, no action creators , no types /constants.
+Clean to write large state management with very minimal boilerplate. 
+
+Assistance with Web components
+--------------------------------
+Don’t use native web components, Instead use framework like Stencil.js from Ionic team (https://stenciljs.com/)  or Lit  from google ( https://lit.dev/ ) to implement web components. 
+Both are good.
+Implementing native web components has following drawbacks.
+
+•	Plain old web component implementation is very imperative code. That is, the code to handle attribute change, i.e, attribute observability, code to handle communication with consuming application, component teardown and unregistering event handler must be coded explicitly. 
+•	Writing low level code such as, access shadowRoot to manipulate component logic, dispatching Events to communicate across web components is not very clean pattern and points back to above bullet point
+•	DOM manipulation on component is not very efficient and leads to complete re-render cycle. Especially in handheld devices could lead to expensive render & experience
+
+Framework such as Stencil & Lit helps considerably in developing efficient & performant web components.
+
+Image recognition / tagging for POLO Ralph Lauren
+---------------------------------------------------
+Aws has “rekognition” service which is used to process images/videos.
+Using this service u can detect object, detect mood from facial expression, identify people, unsafe image evaluation, read text in image, person tracking in video etc. 
+The service provides api’s which responds with a confidence score for the items detected in image/videos along with bounding box for the object.
+ 
+https://aws.amazon.com/rekognition/
+
+Forms in React
+----------------------
+Recently I came across couple of project examples where Forms are implemented using Formik Lib ( https://formik.org/).
+Formik is decent but has inherited performance issues with it. Since it is a controlled component thus it always rerenders when user updating the form.
+For a small form with few fields it could still be fine but in a complex form this perf issue easily show up.
+
+Use React-Hook-Form ( https://react-hook-form.com/) . It is solving this perf problem by make use of uncontrolled components. Also it is equivalent in features viz-a-viz Formik.
+The very first page of React-Hook-Form has a comparison with Formik re-rendering.
+
+Make use of React-Hook-Form in place of Formik.
+
+Monitoring tools
+---------------------------------------------------------------
+We have a React Application with Microservice architecture.
+We use 2-3 monitoring tools to measure the performance related metrics.
+ 
+The tools are:
+1)	mPulse
+2)	Quantum Metrics
+3)	Dynatrace
+ 
+The metrics are:
+1)	First Contentful Paint
+2)	Page load
+ 
+We also use other third party tools like Adobe Launch, Adobe Target, ArcGIS API’s, etc. in addition to the monitoring tools.
+ 
+The metrics are reported (generally) on a monthly basis. The value is the average time for selected pages over a period of month or the period selected using the options in the tool.
+We are trying to identify a tool which can help in providing the above metrics for the application along with the time taken by individual third party scripts.
+e.g. if the first contentful paint for the month is 2 seconds, then out of that 2 seconds how much time is taken by the application and how much time is taken by individual third parties (TP1 xSeconds, TP2 ySeconds etc.) over the month or the selected period.
+ 
+The current tools we have are not segregating the time taken by the Application and different Third party libraries. We are analyzing the available options in the existing tools to see if we can meet the requirement. 
+We are also checking any other tools, Open source preferably, if it can meet the requirement.
+ 
+We Request your help to suggest some tools for the said requirement.
+
+Approach
+W3C performance working group has come with specification for web api’s which browser vendors implement to measure many performance metrics.
+
+1.	There is Navigation Timing interface which can be captured to get values for various important milestone in a web page render.
+E.g 
+•	Navigation Start , Redirect event time , Appcache, TCP connection event, RequestStart , Request End , DOMLoading, DOMInteractive, DOMComplete etc 
+
+This is available on performance.timing object on browser’s window Obj. You can check it on console of your browser
+The Navigation Timing api is also well supported by all browsers.
+
+So coming back to your question on Page Load metrics , you can capture that very well using js code as shown below
+
+const pageloadtime = time.loadEventStart - time.navigationStart;
+
+2.	Similarly, there is Resource Timing Interface which can be used to capture detail network timing data of application resources such as images, stylesheets etc.
+Important network milestones for resources such as redirect start/end time, DNS start/end time , request Start/end times can be captured.
+You can quickly check the same by typing below code on browser console of your application
+performance.getEntriesByType('resource')
+OR
+table( performance.getEntriesByType('resource') )    // For printing in a table format on console
+
+NOTE IMP : When CORS in effect, many of the resource timing will appear as zero. So the 3rd party servers or CDN’s need to enable access policy. The server providing the resource needs to send the HTTP header “Timing-Allow-Origin” with a value specifying the origin (i.e ur domain) to get the restricted timestamp values. Mostly all CDN allow to add custom headers, so should be fairly easy.
+
+3.	Again, To capture the First Paint or First-Contentful-Paint you can use the Paint Timing Interface. 
+You can use the api as shown below.
+
+performance.getEntriesByType('paint');
+
+This will provide both “first-paint”   &  “first-contentful-paint” timing information.
+
+Now, you can Either use these 3 api’s directly in ur JS code or the other better/recommended way is to use Performance Observer Interface provided by browser. In this Observer you can register an array of entryTypes , i.e, in your case it will be entryTypes: [ ‘navigation, 'resource', ‘paint’]  to get above 3 metrices respectively.
+https://developers.google.com/web/updates/2016/06/performance-observer
+
+After capturing all this metrices, If you want to push these data to some server, use sendBeacon() method available on navigator object in almost all modern browsers.  The sendBeacon() will trigger a HTTP Post with your payload and thus you will get all the necessary HTTP headers such as Referer, cookies, User-Agent etc for any additional context to these metrics data. 
+https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon#Browser_compatibility
+
+Get Ready for Deno.js
+-	Deno is a new Javascript & typescript runtime that is simple, secure and modern.
+-	Comes with built-in utilities like bundler and package management, linter , test runner
+-	VS code has extensions available for syntax highlighting 
+-	OOB typescript support.
+
+So why Deno, when Node.js is already doing good
+-	First of all Deno comes with a set of in built packages and tools which was a daunting task in Node env to identify the right pkg’s and toolset of the Dev env. So that is the simplicity Deno is bringing in. 
+-	Security is a big factor in Deno. We cannot run a command unless we give explicit permission e.g, network-access or file-access along with run command. 
+-	Some of the earlier people working on Node are now part of Deno.js . So we can expect to become mainstream runtime for JS/TS soon .
+
+JUST FYI. Today we can run ts on aws node runtime lambda by using SAM framework. But once Aws starts providing Deno runtime for its lambda then we should be able to run lambda directly without SAM.
+
+Nascent State Management in React - Recoil.js
+-----------------------------------------------
+The newest way for state management in React and it certainly going to be the future for React/ReactNative apps.
+This is really more Reactish way to manage state and address complex/performant way for data handling at frontend, for all size of app.
+Also with that Facebook is asserting on to Hooks in components as well… 
+
+See the excellent react Europe conference here,
+https://youtu.be/_ISAA_Jt9kI
+
+Also read about Recoil here
+https://recoiljs.org/docs/introduction/motivation/
+
+React Spectrum From Adobe
+Take a look to the 3 offering from Adobe, a) React Spectrum  b) React Aria. C) React Stately 
+https://react-spectrum.adobe.com/index.html
+React Spectrum — A React implementation of Spectrum, Adobe’s design system.
+React Aria — A library of React Hooks that provides accessible UI primitives for your design system.
+React Stately — A library of React Hooks that provides cross-platform state management and core logic for your design system.
+
+I would like to know reference implementation for below items.
+•	Anyone have implemented Custom Okta Oauth2 authorization code + PKCE for React Native/React Application.
+•	Test driven development approach for React Native.
+Kindly provide me pointers, will connect offline and discuss the queries.
+Appreciated for your help.
+FYI: I have already Gone thru okta blogs post on it.
+https://developer.okta.com/blog/2019/11/14/react-native-login
+
+Approach -
+Okta is already providing the RN package to do OAuth handshake.
+https://github.com/okta/okta-oidc-js/tree/master/packages/okta-react-native
+
+Need pointers - Track user activities on UI for analytics
+--------------------------------------------------------------
+Problem-
+For my current project ( single page application) one of the requirement is to audit, actions user performs on UI.
+Ex.
+-	User logged in to application
+-	Clicked on Menu
+-	Clicked on submenu -> new page loaded -> REST API call, call returned in N seconds. 
+-	Capture error details in case of any error
+Etc.
+ 
+The idea is to have capture various application metrics– ex. user behavior, how much time user spends on a page,  how much time it takes to complete 
+one flow (ex. New user creation in the system) etc.
+ 
+Could you share some pointer if you have similar implementation in any of your application and approach taken for the same.
+ 
+Tech stack – 
+Front End – Angular
+Backend - .NET based microservices, ELK
+ 
+Current implementation 
+Google analytics –  I am  not sure if analytics data could be integrated with external system (ex. big data ) to perform 
+Further analysis or any other option needs to be considered
+ 
+Alternate Approach
+Custom implementation – For each and every action Make a backend call to log the data.
+This approach is intrusive. Any new requirement will require deployment of entire application.
+
+
+Scenario – Capturing the user activities in a session 
+Probable approach without any analytics tools or library 
+•	Creating a unique tracking id and user action params at client side 
+•	Passing this to each service call that is being made from UI, as of now almost all screens make a backend call on load so, even if user is not further performing any action on this UI , still this gets captured
+•	At the service layer I am using Spring Cloud Sleuth for tracing and also capturing this additional track ID from UI in mapping diagnostic context to track the user activity even during service communication 
+•	Logs are then viewed in Kibana ( typical ELK) , and insights can be drawn
+•	We also have Celonis which is a process mining tool and we are also currently analyzing how to integrate our logs with Celonis
+ 
+I am also looking for any standard way of doing this ( without any third party analytics library) , hence looking forward for comments from other experience experts.
+
+Did you guys try to use sendBeacon web api available on navigator object ? This is now supported by all major desktop and mobile browsers. (Except IE-11)
+https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
+Beacon web api supports a non-blocking, async, POST request to an webserver . The good part is the browser itself takes care of scheduling the call and also guarantee request completion before DOM teardown..So it is good for capturing analytics. 
+You can create a small library to abstract your application beaconization feature, which then can be used all across application. 
+Alternatively if you have an centralized state management such as redux ( or mobx,flux, etc) you can probably add a custom middleware in those centralized state management to push the beacon data.
+
+Attached is a small beacon library that I have created (to use rename it to .js ) 
+-	It take 2 endpoints to send data , a analytics endpoint url and an error endpoint url.
+-	Checks if the browser supports beacon webapi and if not then injects a custom sendBeacon method to support it. The custom sendBeacon relies on browser xhr.
+-	Usage 
+o	Do a name import e.g import { Beacon } from "./beacon";
+o	Init the Beacon,    const beacon = Beacon(env); //expecting env to have to endpoint url anlyticEndpoint & errorEndpoint
+o	Send data,  beacon.sendAnalystics(<your data obj>);
+This can lib can further be extended to add more features.
+export const Beacon = ({ anlyticEndpoint, errorEndpoint }) => {
+  const isString = (val) => typeof val === "string";
+  const isBlob = (val) => val instanceof Blob;
+
+  function isBeaconSupported() {
+    if (!("navigator" in this)) {
+      this.navigator = {};
+    }
+
+    if (typeof this.navigator.sendBeacon !== "function") {
+      this.navigator.sendBeacon = sendBeacon.bind(this);
+    }
+  }
+
+  function sendBeacon(url, data) {
+    const event = this.event && this.event.type;
+    const sync = event === "unload" || event === "beforeunload";
+
+    if ("XMLHttpRequest" in this) {
+      const xhr = new XMLHttpRequest();
+
+      xhr.open("POST", url, !sync);
+      xhr.withCredentials = true;
+      xhr.setRequestHeader("Accept", "*/*");
+
+      if (isString(data)) {
+        xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+        xhr.responseType = "text";
+      } else if (isBlob(data) && data.type) {
+        xhr.setRequestHeader("Content-Type", data.type);
+      }
+
+      try {
+        xhr.send(data);
+      } catch (error) {
+        return false;
+      }
+
+      return true;
+    } else {
+      console.info(
+        "You might be in stone age.... your browser does not support xhr"
+      );
+      return false;
+    }
+  }
+  isBeaconSupported.call(
+    window && typeof window === "object" ? window : this || {}
+  );
+  return {
+    sendAnalystics: (data) => {
+      navigator.sendBeacon(anlyticEndpoint, data); //send to analytics url
+    },
+    sendError: (data) => {
+      navigator.sendBeacon(errorEndpoint, data); //send to Error url
+    },
+  };
+};
+
+Do we have any experience in conversion of Silverlight Application(front End) to any other technology?  Also, would like to know if there was any Tool that was used to automate the move to this technology.
+There are no tools provided by MS for this. There is a open source project by name Open Silver which uses Web Assembly, so that browsers can run Mono runtime. 
+https://opensilver.net/
+But I think a migration is required from Silverlight to Opensilver.
+ 
+There is also another tool - http://www.cshtml5.com/
+ 
+I am not aware of any projects which used these tools and not sure how stable these would be. Its better to write the application from scratch with modern HTML5 frameworks.
+On another note, if the client doesn’t need a web app, conversion to WPF/ Xamarin app would be much easier.
+I agree with Mohana, the recommendation at this point is HTML5 /JS frameworks.
+But if the client is MS shop and lacks modern JS skills then the other option is to go for MS Blazor apps development using razor components which would give lot more win-type development experience(C# + html) . Blazor apps when build generates the .net dlls along with mono.wasm . Mono.wasm is the .net runtime webassembly . This mono.wasm(webassembly) will run on browser’s JS runtime and inturn run the dlls of blazor app.
+WebAssembly is now a W3C standard and is supported by all major desktop/mobile browsers now.
+
+Info needed on Supply chain tools for an RFP
+We are currently working on an RFP in supply chain area. Client is expecting the vendor to develop a tool or if one of the below supply chain service provider tools is a good match, 
+they would like to opt for a Buy as well. Kindly let us know, if any of you have come across any of these tools, kindly let us know.
+
+1.	BambooRose
+2.	Inspectorio
+3.	Pivot88
+4.	Intelex
+
+
+
+
+
