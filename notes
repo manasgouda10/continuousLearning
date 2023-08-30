@@ -273,7 +273,20 @@ they would like to opt for a Buy as well. Kindly let us know, if any of you have
 3.	Pivot88
 4.	Intelex
 
+We have the following requirement which is handled from backend
+1.	The data is retrieved from Database like Address, Date etc and printed into a PDF
+Now while printing to  PDF we need to call a Common Service which will take the locale and provide the proper format for Address ,Date , Currency analysis etc
+France: Building|Premise Thoroughfare|DependentLocality|PostalCode Locality
+Germany: Thoroughfare|PostalCode Locality
+UK: Thoroughfare|Locality|PostalCode
+2.	If your team has used any open source/paid utility for this purpose please let us know.
+We plan to then expose this as a service.
+We have explored Experian as a tool that does only address validation and provides the format. However, this is expensive .
+Otherwise , we plan to then build this as a common utility from scratch.
 
+We have found the following option from Google, which provides Address format
+•	Google Geocoding API
+Please check this it might help you: https://www.mapmyindia.com/api/advanced-maps/doc/address-standardization-api
 
 
 
